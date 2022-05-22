@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 bot_token = str(os.getenv("TOKEN"))
 bot       = interactions.Client(bot_token)
-SCOPE     = int(str(os.getenv("SCOPE")))#977414461239476234
+SCOPE     = int(str(os.getenv("SCOPE")))
 
 #Functions
 @bot.event()
