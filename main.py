@@ -1,6 +1,8 @@
 import interactions
 import os
 import random
+import subprocess
+import glob
 from dotenv import load_dotenv
 
 #Globals
@@ -46,6 +48,28 @@ async def delete_all_messages(context:interactions.CommandContext):
     except Exception as e:
         print(e)
         await context.send(f"There was an error deleting messages 😬\nSorry about that, {context.user.mention}!")
+
+@bot.command(
+    name="update-proxies",
+    description="Update Proxy list on main server computer",
+    scope=SCOPE
+)
+async def update_proxies(context:interactions.CommandContext):
+    await context.send("Updating proxies...")
+    try:
+        scripts = glob.glob("../*/*.py")
+        cmd = ""
+        for script in scripts:
+            if "get_IPs.py" in script:
+                cmd = f"python3 {script}"
+                break
+        if not cmd:
+            raise Exception
+        subprocess.call(cmd,shell=True)
+    except Exception as e:
+        await context.send(f"Error updating proxies: {str(e)}")
+    finally:
+        await context.send("Done handling 'update-proxies' command")
 
 @bot.command(
     name="shutdown",
