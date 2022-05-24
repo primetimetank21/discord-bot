@@ -57,18 +57,24 @@ async def delete_all_messages(context:interactions.CommandContext):
 async def update_proxies(context:interactions.CommandContext):
     await context.send("Updating proxies...")
     try:
+        discord_home_dir = os.path.abspath(".") #used to get back here in the future
         scripts = glob.glob("../*/*.py")
         cmd = ""
         for script in scripts:
             if "get_IPs.py" in script:
                 cmd = f"python3 {script}"
+                cmd_dir = script.split("/")
+                cmd_dir.pop(-1)
+                cmd_dir = "/".join(cmd_dir)
                 break
-        if not cmd:
+        if not cmd or not cmd_dir:
             raise Exception
+        os.chdir(cmd_dir)
         subprocess.call(cmd,shell=True)
     except Exception as e:
         await context.send(f"Error updating proxies: {str(e)}")
     finally:
+        os.chdir(discord_home_dir)
         await context.send("Done handling 'update-proxies' command")
 
 @bot.command(
